@@ -1,0 +1,21 @@
+{
+    "app_name": "Content Management Application",
+    "app_version": "1.0.0",
+    "app_url": "127.0.0.1",
+    "app_base": "/smart-cms",
+    "api": {
+        "_url": "/api",
+        "_version": "/1.0"
+    },
+    "mongodb": {
+        "db": "smart-cms",
+        "host": "127.0.0.1",
+        "username": "",
+        "port": "",
+        "collections": {
+            "client":"smart-client"
+        }
+    },
+    "api_query_limit": 10,
+    "rounds":15
+}
