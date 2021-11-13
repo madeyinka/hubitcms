@@ -16,6 +16,9 @@
             "client":"smart-client"
         }
     },
+    "asset_folder":"./assets",
+    "reset_msg":"Password Reset",
+    "default_folder":"assets",
     "api_query_limit": 10,
     "rounds":15
 }

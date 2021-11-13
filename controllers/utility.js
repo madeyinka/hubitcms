@@ -8,4 +8,12 @@ router.post('/admin-login', (req, res) => {
     })
 })
 
+router.post('/forgot-password', (req, res) => {
+    const clientDAO = require('./../dao/ClientDAO')
+    clientDAO.reset_pass(Util.param_extract(req), (state) => {
+        Util.resp(res).json(state)
+    })
+})
+
+
 module.exports = router

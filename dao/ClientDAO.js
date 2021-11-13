@@ -1,7 +1,7 @@
 const Resp = require('./Response')
 const Util = require('./../libraries/Utility')
 const clientModel = require('./../model/ClientModel')
-const { param } = require('../controllers/client')
+const _config = require('./../config/app.json')
 
 const initDAO = {
 
@@ -107,6 +107,30 @@ const initDAO = {
             })
         } else 
             return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
+    },
+
+    reset_pass: (param, callback) => {
+        const error = []
+        if (!param.email)error.push('Email is required')
+
+        if (error.length == 0) {
+            clientModel.findOne({conditions:{email:param.email}}, (user) => {
+                if (!user)
+                    return callback(Resp.error({msg:"User does not exist"}))
+                else {
+                    const {sendMail} = require('./../libraries/Mailer')
+                    const {reset} = require('./../templates/Messages')
+                    sendMail({email:user.email, subject:_config.reset_msg, message:reset(user)}, (msg) => {
+                        if (msg && msg.id)
+                            return callback(Resp.success({msg:"Please, check your mailbox for password reset link"}))
+                        else
+                            return callback(Resp.error({msg:"Email service is unavailable"}))
+                    })
+                }
+            })
+        } else {
+            return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
+        }
     }
 }
 
