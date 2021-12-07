@@ -15,7 +15,7 @@ const initDAO = {
         
         if (error.length == 0) {
             const data = {name:param.name,email:param.email, password:Util.rand_str(8),phone:param.phone, 
-                          access:param.access, product_type:param.product, passkey:Util.rand_str(15),
+                          access:param.access, product_type:param.product, password:Util.get_hash(param.password),passkey:Util.rand_str(15),
                           company:param.company, site_title:param.title, site_desc:param.description, logo:param.logo, 
                           website:param.website, address:param.address, status:param.status, publish:param.publish}
             clientModel.save(data, (resp) => {
