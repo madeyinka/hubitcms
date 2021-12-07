@@ -21,7 +21,7 @@
             "content":"smart-content"
         }
     },
-    "reset_link":"https://hubitcms.netlify.app/newpassword/1223",
+    "reset_link":"https://hubitcms.netlify.app/update-password",
     "asset_folder":"./assets",
     "reset_msg":"Password Reset",
     "default_folder":"assets",
