@@ -13,9 +13,15 @@
         "username": "",
         "port": "",
         "collections": {
-            "client":"smart-client"
+            "client":"smart-client",
+            "page":"smart-page",
+            "category":"smart-category",
+            "subcategory":"smart-subcategory",
+            "tag":"smart-tag",
+            "content":"smart-content"
         }
     },
+    "reset_link":"https://hubitcms.netlify.app/newpassword/1223",
     "asset_folder":"./assets",
     "reset_msg":"Password Reset",
     "default_folder":"assets",

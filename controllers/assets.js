@@ -1,10 +1,7 @@
-const express = require('express'), router = express.Router()
-const fs = require('fs')
-const _config = require('./../config/app.json')
-const upload = require('./../libraries/Multer')
-const Util = require('./../libraries/Utility')
-const Resp = require('./../dao/Response')
-const cloudinary = require('./../libraries/Cloudinary')
+const express = require('express'), router = express.Router(),
+fs = require('fs'), _config = require('./../config/app.json'),
+upload = require('./../libraries/Multer'), Util = require('./../libraries/Utility'),
+Resp = require('./../dao/Response'), cloudinary = require('./../libraries/Cloudinary')
 
 router.post('/upload', (req, res) => {
     const location = _config.asset_folder

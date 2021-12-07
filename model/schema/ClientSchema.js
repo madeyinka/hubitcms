@@ -10,10 +10,15 @@ var SchemaDef = new Schema ({
     access: {type:String, enum:["0101", "0103"], default:"0101"},
     product_type:{type:String, default:""},
     phone:{type:String, default:""},
+    passkey:{type:String, default:""},
+    company:{type:String, default:""},
     address:{type:String, default:""},
     website:{type:String, default:""},
     logo:{type:String, default:""},
+    site_title:{type:String, default:""},
+    site_desc:{type:String, default:""},
     status:{type:Number, default:1},
+    publish:{type:Boolean, default:true},
     del_flag:{type:Number, default:0}
 }, {timestamps:true})
 

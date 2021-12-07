@@ -15,5 +15,12 @@ router.post('/forgot-password', (req, res) => {
     })
 })
 
+router.post('/update-password', (req, res) => {
+    const clientDAO = require('./../dao/ClientDAO')
+    clientDAO.pass_update(Util.param_extract(req), (state) => {
+        Util.resp(res).json(state)
+    })
+})
+
 
 module.exports = router
