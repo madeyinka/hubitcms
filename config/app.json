@@ -18,9 +18,17 @@
             "category":"smart-category",
             "subcategory":"smart-subcategory",
             "tag":"smart-tag",
-            "content":"smart-content"
+            "content":"smart-content",
+            "asset":"smart-assets"
         }
     },
+    "fb": {
+        "long_token":"https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=[APP-ID]&client_secret=[APP-SECRET]&fb_exchange_token=[SHORT-TOKEN]",
+        "page_token":"https://graph.facebook.com/[PAGE-ID]?fields=access_token&access_token=[LONG-TOKEN]",
+        "publish_post":"https://graph.facebook.com/[PAGE-ID]/feed",
+        "delete_post":"https://graph.facebook.com/[PAGE-POST-ID]?access_token=[PAGE-TOKEN]"
+    },
+    "page_start":1,
     "reset_link":"https://hubitcms.netlify.app/update-password",
     "asset_folder":"./assets",
     "reset_msg":"Password Reset",

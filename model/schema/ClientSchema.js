@@ -17,8 +17,10 @@ var SchemaDef = new Schema ({
     logo:{type:String, default:""},
     site_title:{type:String, default:""},
     site_desc:{type:String, default:""},
+    fb_token:{type:String, default:""},
+    fb_page_id:{type:String, default:""},
     status:{type:Number, default:1},
-    publish:{type:Boolean, default:true},
+    publish:{type:Boolean, default:false},
     del_flag:{type:Number, default:0}
 }, {timestamps:true})
 
