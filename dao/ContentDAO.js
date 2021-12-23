@@ -6,7 +6,7 @@ const urlSlug = require('url-slug')
 
 const initDAO = {
 
-    create: (param, callback) => {
+    create: (param, user, callback) => {
         const error = []
         if (!param.title)error.push('Provide title for content')
         if (!param.category)error.push('Select a category')
@@ -15,15 +15,25 @@ const initDAO = {
         if (error.length == 0) {
             const data = {title:param.title, slug:urlSlug(param.title), category:param.category, subcategory:param.subcategory, type:param.type,
             media_link:param.media, featured:param.featured, short_content:param.short_content, content:param.content, cover_img:param.cover_img,
-            thumb_img:param.thumb_img, keywords:unique(param.keywords.replace(" ","").split(",")), author:param.author, meta_title:param.meta_title,
-            meta_keywords:unique(param.meta_keywords.replace(" ","").split(",")), meta_description:param.meta_description, client_id:req.userInfo.id,
-            status:param.status}
+            link:param.link, thumb_img:param.thumb_img, author:param.author, meta_title:param.meta_title,meta_description:param.meta_description, 
+            client_id:user._id, status:param.status}
             if (param.pub_date)data.pub_date = Util.date_time(param.pub_date)
+            if (param.keywords)data.keywords = unique(param.keywords.replace(" ","").split(","))
+            if (param.meta_keywords)data.meta_keywords = unique(param.meta_keywords.replace(" ","").split(","))
             contentModel.save(data, (resp) => {
                 if (!resp._id)
                     return callback(Resp.error({msg:"Could not save data.", resp:null}))
-                else 
-                    return callback(Resp.success({msg:"Content successfully added.", resp:resp}))
+                else { 
+                    if (param.post_to_fb) {
+                        const settingsDAO = require('./SettingsDAO')
+                        settingsDAO.publish_fb(resp._id, user, (state)=>{
+                            if (state.status) {
+                                return callback(Resp.success({msg:"Content added and published", resp:resp}))
+                            }
+                        })
+                    } else
+                        return callback(Resp.success({msg:"Content successfully added.", resp:resp}))
+                }
             })
         } else 
             return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
@@ -72,7 +82,8 @@ const initDAO = {
         })
     },
 
-    pull: (param, callback) => {
+    pull: (param, user, callback) => {
+        param.client_id = user._id
         contentModel.findAll((Util.param_filter(param)), (state) => {
             if (!state.error) {
                 return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))
