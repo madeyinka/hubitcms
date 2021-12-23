@@ -6,13 +6,13 @@ const urlSlug = require('url-slug')
 
 const initDAO = {
 
-    create: (param, callback) => {
+    create: (param, user, callback) => {
         const error = []
         if (!param.title)error.push('Provide title for page')
 
         if (error.length == 0) {
             const data = {title:param.title, slug:urlSlug(param.title), content:param.content, keywords:param.keywords, 
-                description:param.description, client_id:req.userInfo.id, status:param.status}
+                description:param.description, client_id:user._id, status:param.status}
                 pageModel.save(data, (resp) => {
                     if (!resp._id) {
                         return callback(Resp.error({msg:"Could not save data."}))
@@ -23,7 +23,7 @@ const initDAO = {
             return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
     },
 
-    modify: (param, callback) => {
+    modify: (param, user, callback) => {
         const error = [], data = {}
         if (!param.identity)error.push('Provide identity')
         if (param.title)data.title = param.title
@@ -55,7 +55,8 @@ const initDAO = {
         })
     },
 
-    pull: (param, callback) => {
+    pull: (param, user, callback) => {
+        param.client_id = user._id
         pageModel.findAll((Util.param_filter(param)), (state) => {
             if (!state.error) {
                 return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))

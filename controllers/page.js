@@ -4,13 +4,15 @@ const pageDAO = require('./../dao/PageDAO')
 const { authenticate } = require('../middlewares')
 
 router.post('/create', authenticate, (req, res) => {
-    pageDAO.create(Util.param_extract(req), (state) => {
+    const user = req.userInfo
+    pageDAO.create(Util.param_extract(req), user, (state) => {
         Util.resp(res).json(state)
     })
 })
 
 router.post('/modify', authenticate, (req, res) => {
-    pageDAO.update(Util.param_extract(req), (state) => {
+    const user = req.userInfo
+    pageDAO.update(Util.param_extract(req), user, (state) => {
         Util.resp(res).json(state)
     })
 })
@@ -22,7 +24,8 @@ router.get('/by-identity', authenticate, (req, res) => {
 })
 
 router.get('/pull', authenticate, (req, res) => {
-    pageDAO.pull(req.query, (state) => {
+    const user = req.userInfo
+    pageDAO.pull(req.query, user, (state) => {
         Util.resp(res).json(state)
     })
 })
