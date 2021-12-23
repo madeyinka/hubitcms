@@ -11,5 +11,6 @@ router.use(api_url+'/page', require('./page'))
 router.use(api_url+'/category', require('./category'))
 router.use(api_url+'/subcategory', require('./subcategory'))
 router.use(api_url+'/content', require('./content'))
+router.use(api_url+'/settings', require('./settings'))
 
 module.exports = router
