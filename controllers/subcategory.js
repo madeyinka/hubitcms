@@ -1,32 +1,35 @@
 const express = require('express'), router = express.Router()
 const Util = require('./../libraries/Utility')
 const subcategoryDAO = require('./../dao/SubcategoryDAO')
+const { authenticate } = require('../middlewares')
 
-router.post('/create', (req, res) => {
-    subcategoryDAO.create(Util.param_extract(req), (state) => {
+router.post('/create', authenticate, (req, res) => {
+    const user = req.userInfo
+    subcategoryDAO.create(Util.param_extract(req), user, (state) => {
         Util.resp(res).json(state)
     })
 })
 
-router.post('/modify', (req, res) => {
+router.post('/modify', authenticate, (req, res) => {
     subcategoryDAO.update(Util.param_extract(req), (state) => {
         Util.resp(res).json(state)
     })
 })
 
-router.get('/by-identity', (req, res) => {
+router.get('/by-identity', authenticate, (req, res) => {
     subcategoryDAO.by_identity(req.query.identity, (state) => {
         Util.resp(res).json(state)
     })
 })
 
-router.get('/pull', (req, res) => {
-    subcategoryDAO.pull(req.query, (state) => {
+router.get('/pull', authenticate, (req, res) => {
+    const user = req.userInfo
+    subcategoryDAO.pull(req.query, user, (state) => {
         Util.resp(res).json(state)
     })
 })
 
-router.get('/delete', (req, res) => {
+router.get('/delete', authenticate, (req, res) => {
     subcategoryDAO.del(req.query.identity, (state) => {
         Util.resp(res).json(state)
     })

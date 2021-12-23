@@ -5,7 +5,7 @@ const urlSlug = require('url-slug')
 
 const initDAO = {
 
-    create: (param, callback) => {
+    create: (param, user, callback) => {
         const error = []
         if (!param.label)error.push('Label is required')
         if (!param.category)error.push('Please select a category')
@@ -16,7 +16,7 @@ const initDAO = {
                 slug:urlSlug(param.label),
                 category:param.category,
                 description:param.description,
-                client_id:req.userInfo.id,
+                client_id:user.id,
                 status:param.status
             }
             subcategoryModel.save(data, (resp) => {
@@ -60,7 +60,8 @@ const initDAO = {
         })
     },
 
-    pull: (param, callback) => {
+    pull: (param, user, callback) => {
+        param.client_id = user.id
         subcategoryModel.findAll((Util.param_filter(param)), (state) => {
             if (!state.error) {
                 return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))
