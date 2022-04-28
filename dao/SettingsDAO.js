@@ -37,7 +37,7 @@ const initDAO = {
                         const dataObj = {id:userInfo.fb_page_id, token:userInfo.fb_token, msg:data.short_content, link:data.link}
                         fb._publish(dataObj, (response) => {
                             if (response && response.id) {
-                                contentModel.update({fb_postid:response.id}, {_id:identity}, (state) =>{
+                                contentModel.update({fb_postid:response.id, fb_status:true}, {_id:identity}, (state) =>{
                                     if (state && !state.error) {
                                         return callback({msg:"Content Published", status:true})
                                     }
@@ -57,7 +57,7 @@ const initDAO = {
                 const dataObj = {id:data.fb_postid, token:userInfo.fb_token}
                 fb._unpublish(dataObj, (response) => {
                     if (response) {
-                        contentModel.update({fb_postid:""}, {_id:identity}, (resp) => {
+                        contentModel.update({fb_postid:"", fb_status:false}, {_id:identity}, (resp) => {
                             if (resp._id) {
                                 return callback({status:true})
                             }

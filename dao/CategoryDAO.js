@@ -13,6 +13,7 @@ const initDAO = {
             const data = {
                 label:param.label,
                 slug:urlSlug(param.label),
+                image:param.image,
                 description:param.description,
                 client_id:user.id,
                 status:param.status
@@ -57,8 +58,7 @@ const initDAO = {
         })
     },
 
-    pull: (param, user, callback) => {
-        param.client_id = user.id
+    pull: (param, callback) => {
         categoryModel.findAll((Util.param_filter(param)), (state) => {
             if (!state.error) {
                 return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))

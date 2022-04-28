@@ -19,7 +19,13 @@
             "subcategory":"smart-subcategory",
             "tag":"smart-tag",
             "content":"smart-content",
-            "asset":"smart-assets"
+            "asset":"smart-assets",
+            "department":"smart-department",
+            "contact":"smart-contact",
+            "service":"smart-service",
+            "project":"smart-project",
+            "group":"smart-group",
+            "collection":"smart-collection"
         }
     },
     "fb": {
@@ -29,10 +35,10 @@
         "delete_post":"https://graph.facebook.com/[PAGE-POST-ID]?access_token=[PAGE-TOKEN]"
     },
     "page_start":1,
-    "reset_link":"https://hubitcms.netlify.app/update-password",
+    "reset_link":"http://localhost:3000/auth/update-password",
     "asset_folder":"./assets",
     "reset_msg":"Password Reset",
     "default_folder":"assets",
-    "api_query_limit": 10,
+    "api_query_limit": 1000,
     "rounds":15
 }

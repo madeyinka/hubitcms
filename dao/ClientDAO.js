@@ -8,15 +8,33 @@ const initDAO = {
 
     create: (param, callback) => {
         const error = []
-        if (!param.name)error.push('Name is required')
+        if (!param.firstname)error.push('First Name is required')
+        if (!param.lastname)error.push('Last Name is required')
         if (!param.email)error.push('Email is required')
         if (!param.company)error.push('Company name is required')
         if (!param.website)error.push('Website is required')
+        if (!param.product)error.push('Select an option for platform')
         
         if (error.length == 0) {
-            const data = {name:param.name,email:param.email,phone:param.phone, access:param.access, product_type:param.product, 
-                          password:Util.get_hash(param.name+"@2021"),passkey:Util.rand_str(15),company:param.company, site_title:param.title, 
-                          site_desc:param.description, logo:param.logo, website:param.website, address:param.address, status:param.status, publish:param.publish}
+            const data = {
+                fname:param.firstname,
+                lname:param.lastname,
+                email:param.email,
+                phone:param.phone, 
+                product_type:param.product, 
+                sector:param.sector,
+                role:param.role,
+                password:Util.get_hash(param.firstname),
+                passkey:Util.rand_str(15),
+                company:param.company, 
+                website:param.website, 
+                address:param.address,
+                state:param.state,
+                lga:param.lga,
+                status:param.status,
+                publish:param.publish,
+                logo:param.logo        
+            }
             
             clientModel.save(data, (resp) => {
                 if (!resp._id) 
@@ -32,21 +50,34 @@ const initDAO = {
         var error = []
         var data = {}
         if (!param.identity)error.push('Provide Identity')
-        if (param.name)data.name = param.name
+        if (param.firstname)data.fname = param.firstname
+        if (param.lastname)data.lname = param.lastname
         if (param.email)data.email = param.email
         if (param.phone)data.phone = param.phone
         if (param.access)data.access = param.access
+        if (param.sector)data.sector = param.sector
+        if (param.role)data.role = param.role
         if (param.product)data.product_type = param.product
         if (param.logo)data.logo = param.logo
+        if (param.avatar)data.avatar = param.avatar
         if (param.address)data.address = param.address
-        if (param.website)data.website = param.website
-        if (param.status)data.status = param.status
+        if (param.lga)data.lga = param.lga
+        if (param.state)data.state = param.state
+        if (param.country)data.country = param.country
+        if (param.language)data.language = param.language
+        if (param.website)data.website = param.website 
         if (param.company)data.company = param.company
         if (param.title)data.site_title = param.title
         if (param.description)data.site_desc = param.description
+        if (param.facebook)data.facebook = param.facebook
+        if (param.twitter)data.twitter = param.twitter
+        if (param.instagram)data.instagram = param.instagram
+        if (param.linkedln)data.linkedln = param.linkedln
+        if (param.fb_page_id)data.fb_page_id = param.fb_page_id
+        if (param.fb_token)data.fb_token = param.fb_token
         if (param.passkey)data.passkey = param.passkey
-        if (param.fb)data.fb_keys = param.fb
-        if (param.publish)data.publish = param.publish
+        data.status = param.status
+        data.publish = param.publish
 
         if (error.length == 0) {
             if (data) {
@@ -90,75 +121,6 @@ const initDAO = {
                     return callback(Resp.success({msg:"Data successfully deleted."}))
                 else
                     return callback(Resp.error({msg:"Error in deleting data"}))
-            })
-        } else 
-            return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
-    },
-
-    administrative_login: (param, callback) => {
-        var error = []
-        if (!param.email)error.push('Provide client email')
-        if (!param.password)error.push('Password is required')
-
-        if (error.length == 0) {
-            clientModel.findOne({conditions:{email:param.email}}, (user) => {
-                if (user){
-                    const match = Util.check_password(param.password, user.password)
-                    if (match && user.status == 1) {
-                        const token = Util.generate_token({id:user._id})
-                        return callback(Resp.success({msg:"logged in", resp:token}))
-                    } else
-                        return callback(Resp.error({msg:"Invalid Credentials"}))
-                }
-                else 
-                    return callback(Resp.error({msg:"User does not exist"}))
-            })
-        } else 
-            return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
-    },
-
-    reset_pass: (param, callback) => {
-        const error = [], option = {}
-        if (!param.email)error.push('Email is required')
-
-        if (error.length == 0) {
-            clientModel.findOne({conditions:{email:param.email}}, (user) => {
-                if (!user)
-                    return callback(Resp.error({msg:"User does not exist"}))
-                else {
-                    option.email = user.email
-                    option.subject = _config.reset_msg
-                    option.message = {name:user.name, link:_config.reset_link+'?identity='+user._id+'&key='+user.passkey}
-                    sendMail(option, 'reset', (msg) => {
-                        if (msg && msg.id)
-                            return callback(Resp.success({msg:"Please, check your mailbox for password reset link"}))
-                        else
-                            return callback(Resp.error({msg:"Email service is unavailable"}))
-                    })
-                }
-            })
-        } else {
-            return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
-        }
-    },
-
-    pass_update: (param, callback) => {
-        const error = []
-        if (!param.identity)error.push('Provide identity')
-        if (!param.password)error.push('Password is required')
-
-        if (error.length == 0) {
-            clientModel.findOne({conditions:{_id:param.identity}}, (user) => {
-                if (Util.compare_param(user.passkey, param.key)){
-                    const data = {password:Util.get_hash(param.password), passkey:Util.rand_str(15)}
-                    clientModel.update(data, {_id:param.identity}, (state) => {
-                        if (state && !state.error) 
-                            return callback(Resp.success({msg:"Password updated successfully"}))
-                        else
-                            return callback(Resp.error({msg:"Error Updating record"}))
-                    })
-                } else 
-                    return callback(Resp.error({msg:"Invalid Link", resp:null}))
             })
         } else 
             return callback(Resp.error({msg:"Invalid Parameter", resp:error}))

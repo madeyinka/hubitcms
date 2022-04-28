@@ -6,11 +6,13 @@ var Schema = mongoose.Schema
 var SchemaDef = new Schema ({
     title:{type:String, default:""},
     slug:{type:String, default:""},
-    category:{type:String, default:""},
-    subcategory:{type:String, default:""},
+    category_id:{type:String, default:""},
+    category_label:{type:String, default:""},
+    subcategory_id:{type:String, default:""},
+    subcategory_label:{type:String, default:""},
     type:{type:String, default:""},
     media_link:{type:String, default:""},
-    featured:{type:Number, default:0},
+    featured:{type:Boolean, default:false},
     short_content:{type:String, default:""},
     content:{type:String, default:""},
     cover_img:{type:String, default:""},
@@ -24,7 +26,8 @@ var SchemaDef = new Schema ({
     fb_postid:{type:String, default:""},
     pub_date:{type:Date, default:Date.now},
     client_id:{type:String, default:""},
-    status:{type:Number, default:0},
+    status:{type:Boolean, default:false},
+    fb_status:{type:Boolean, deafult:false},
     del_flag:{type:Number, default:0}
 }, {timestamps:true})
 

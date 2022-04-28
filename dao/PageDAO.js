@@ -11,8 +11,16 @@ const initDAO = {
         if (!param.title)error.push('Provide title for page')
 
         if (error.length == 0) {
-            const data = {title:param.title, slug:urlSlug(param.title), content:param.content, keywords:param.keywords, 
-                description:param.description, client_id:user._id, status:param.status}
+            const data = {
+                            title:param.title, 
+                            slug:param.slug ? urlSlug(param.slug) : urlSlug(param.title), 
+                            content:param.content, 
+                            meta_title:param.meta_title, 
+                            meta_keywords:param.meta_keywords, 
+                            meta_description:param.meta_description, 
+                            client_id:user._id, 
+                            status:param.status
+                        }
                 pageModel.save(data, (resp) => {
                     if (!resp._id) {
                         return callback(Resp.error({msg:"Could not save data."}))
@@ -23,15 +31,16 @@ const initDAO = {
             return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
     },
 
-    modify: (param, user, callback) => {
+    update: (param, callback) => {
         const error = [], data = {}
         if (!param.identity)error.push('Provide identity')
         if (param.title)data.title = param.title
         if (param.title)data.slug = urlSlug(param.title)
         if (param.content)data.content = param.content
-        if (param.keywords)data.keywords = param.keywords
-        if (param.description)data.description = param.description
-        if (param.status)data.status = param.status
+        if (param.meta_title)data.meta_title = param.meta_title
+        if (param.meta_keywords)data.meta_keywords = param.meta_keywords
+        if (param.meta_description)data.meta_description = param.meta_description
+        data.status = param.status
 
         if (error.length == 0) {
             if (data) {
@@ -55,8 +64,8 @@ const initDAO = {
         })
     },
 
-    pull: (param, user, callback) => {
-        param.client_id = user._id
+    pull: (param, callback) => {
+        //param.client_id = user._id
         pageModel.findAll((Util.param_filter(param)), (state) => {
             if (!state.error) {
                 return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))

@@ -1,6 +1,6 @@
 const _config = require('./../config/app.json')
 
-const Fb = {
+const FB = {
 
     get_token: (data, callback) => {
         const url = _config.fb.long_token.replace("[APP-ID]", data.app_id).replace("[APP-SECRET]", data.app_secret).replace("[SHORT-TOKEN]", data.token)
@@ -60,4 +60,4 @@ const Fb = {
     
 }
 
-module.exports = Fb
+module.exports = FB

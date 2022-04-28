@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/madeyinka/hubitcms#readme",
   "dependencies": {
+    "@google-analytics/data": "^2.8.0",
     "array-unique": "^0.3.2",
     "bcrypt": "^5.0.1",
     "bluebird": "^3.7.2",

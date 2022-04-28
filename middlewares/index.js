@@ -14,7 +14,9 @@ const init = {
         }
         let token = splitHeader[1];
         jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
-            if (error) res.status(401).json({message:"Not authorized"})
+            if (error) {
+                res.status(403).json({message:"Token is invalid or expired"})
+            }
             else{
                 clientModel.findOne({conditions:{_id:decoded.id}}, (user) => {
                     if (!user) throw new Error()
