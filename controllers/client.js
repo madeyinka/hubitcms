@@ -3,7 +3,7 @@ const Util = require('./../libraries/Utility')
 const clientDAO = require('./../dao/ClientDAO')
 const adminChecker = require('../middlewares/adminChecker')
 
-router.post('/create', adminChecker, (req, res) => {
+router.post('/create', (req, res) => {
     clientDAO.create(Util.param_extract(req), (state) => {
         Util.resp(res).json(state)
     })
