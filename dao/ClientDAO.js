@@ -11,9 +11,10 @@ const initDAO = {
         if (!param.firstname)error.push('First Name is required')
         if (!param.lastname)error.push('Last Name is required')
         if (!param.email)error.push('Email is required')
+        if (!param.password)error.push('Password is required')
         if (!param.company)error.push('Company name is required')
         if (!param.website)error.push('Website is required')
-        if (!param.product)error.push('Select an option for platform')
+        if (!param.plan)error.push('Select an option for platform')
         
         if (error.length == 0) {
             const data = {
@@ -21,14 +22,16 @@ const initDAO = {
                 lname:param.lastname,
                 email:param.email,
                 phone:param.phone, 
-                product_type:param.product, 
+                plan:param.plan, 
                 sector:param.sector,
-                role:param.role,
-                password:Util.get_hash(param.firstname),
+                position:param.position,
+                roles:param.role,
+                password:Util.get_hash(param.password),
                 passkey:Util.rand_str(15),
                 company:param.company, 
                 website:param.website, 
                 address:param.address,
+                country:param.country,
                 state:param.state,
                 lga:param.lga,
                 status:param.status,
@@ -54,17 +57,16 @@ const initDAO = {
         if (param.lastname)data.lname = param.lastname
         if (param.email)data.email = param.email
         if (param.phone)data.phone = param.phone
-        if (param.access)data.access = param.access
+        if (param.position)data.position = param.position
         if (param.sector)data.sector = param.sector
-        if (param.role)data.role = param.role
-        if (param.product)data.product_type = param.product
+        if (param.role)data.roles = param.role
+        if (param.plan)data.plan = param.plan
         if (param.logo)data.logo = param.logo
         if (param.avatar)data.avatar = param.avatar
         if (param.address)data.address = param.address
         if (param.lga)data.lga = param.lga
         if (param.state)data.state = param.state
         if (param.country)data.country = param.country
-        if (param.language)data.language = param.language
         if (param.website)data.website = param.website 
         if (param.company)data.company = param.company
         if (param.title)data.site_title = param.title
@@ -73,11 +75,11 @@ const initDAO = {
         if (param.twitter)data.twitter = param.twitter
         if (param.instagram)data.instagram = param.instagram
         if (param.linkedln)data.linkedln = param.linkedln
-        if (param.fb_page_id)data.fb_page_id = param.fb_page_id
+        if (param.fb_page)data.fb_page = param.fb_page
         if (param.fb_token)data.fb_token = param.fb_token
+        if (param.refresh_token)data.refresh_token = param.refresh_token
         if (param.passkey)data.passkey = param.passkey
-        data.status = param.status
-        data.publish = param.publish
+        data.status = param.status; data.publish = param.publish
 
         if (error.length == 0) {
             if (data) {

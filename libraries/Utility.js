@@ -61,10 +61,20 @@ const Utility = {
         return result
     },
 
-    generate_token:  function(payload) {
+    access_token: (payload) => {
         const jwt = require('jsonwebtoken')
-        const token = jwt.sign(payload, process.env.JWT_SECRET)
-        return token;
+        return jwt.sign(
+            {
+                "userObj": {"id": payload.id,"username": payload.name,"roles": payload.roles,"website": payload.website}
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '15m'}
+        )
+    },
+
+    refresh_token: (payload) => {
+        const jwt = require('jsonwebtoken')
+        return jwt.sign({"username": payload.name}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:'1d'})
     },
 
     compare_param: function(a,b) {

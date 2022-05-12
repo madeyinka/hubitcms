@@ -3,11 +3,7 @@ const Util = require('./../libraries/Utility')
 const authDAO = require('./../dao/AuthDAO')
 const { authenticate } = require('../middlewares')
 
-router.post('/login', (req, res) => {
-    authDAO.login(Util.param_extract(req), (state) => {
-        Util.resp(res).json(state)
-    })
-})
+router.post('/login', authDAO.handleLogin)
 
 router.post('/reset', (req, res) => {
     authDAO.reset(Util.param_extract(req), (state) => {

@@ -6,36 +6,38 @@ const { sendMail } = require('./../libraries/Mailer')
 
 const initAuth = {
 
-    login: (param, callback) => {
-        var error = []
-        if (!param.email)error.push('Provide client email')
-        if (!param.password)error.push('Password is required')
+    handleLogin: (req, res) => {
+        const {email, password} = req.body
+        if (!email || !password) return res.status(400).json({msg:"Invalid Credentials"})
 
-        if (error.length == 0) {
-            clientModel.findOne({conditions:{email:param.email}}, (user) => {
-                if (user){
-                    const match = Util.check_password(param.password, user.password)
-                    if (match && user.status) {
-                        const token = Util.generate_token({id:user._id})
-                        const userInstance = {
-                            id:user._id,
-                            firstname:user.fname,
-                            lastname:user.lname,
-                            website:user.website,
-                            isAdmin:user.access === '0105'? true : false,
-                            product:user.product_type,
-                            isAuthenticated:true,
-                            token:token
-                        }
-                        return callback(Resp.success({msg:"user Logged in", resp:userInstance}))
-                    } else
-                        return callback(Resp.error({msg:"Invalid Credentials"}))
+        //check if user exists
+        clientModel.findOne({conditions:{email:email}}, (user) => {
+            if (user) { 
+                //check password match if user exists
+                if (Util.check_password(password, user.password)){ 
+                    //check if user status is active
+                    if (user.status) {
+                        const roles = Object.values(user.roles).filter(Boolean)
+                        const payload = {id:user._id, name:user.fname,roles:roles,website:user.website}
+                        const accessToken = Util.access_token(payload)
+                        const refreshToken = Util.refresh_token(payload)
+                        clientModel.update({refresh_token:refreshToken}, {_id:user._id}, (state) => {
+                            if (state._id){
+                                //set http cookie
+                                res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 })
+                                res.status(200).json({msg:"Login Successful", response:{payload, accessToken}})
+                            }
+                        })
+                    } else {
+                        return res.status(403).json({msg:"Contact Administrator"})
+                    }
+                } else {
+                    return res.status(400).json({msg:"Invalid Credentials"})
                 }
-                else 
-                    return callback(Resp.error({msg:"User does not exist"}))
-            })
-        } else 
-            return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
+            } else {
+                return res.status(404).json({msg:"User not found"})
+            }
+        })
     },
 
     reset: (param, callback) => {
