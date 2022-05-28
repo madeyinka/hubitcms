@@ -1,8 +1,6 @@
 const Resp = require('./Response')
 const Util = require('./../libraries/Utility')
 const clientModel = require('./../model/ClientModel')
-const _config = require('./../config/app.json')
-const { sendMail } = require('./../libraries/Mailer')
 
 const initDAO = {
 
@@ -33,6 +31,7 @@ const initDAO = {
                 address:param.address,
                 country:param.country,
                 state:param.state,
+                state_alias:param.state_alias,
                 lga:param.lga,
                 status:param.status,
                 publish:param.publish,
@@ -49,10 +48,9 @@ const initDAO = {
             return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
     },
 
-    update: (param, callback) => {
-        var error = []
-        var data = {}
-        if (!param.identity)error.push('Provide Identity')
+    update: (param, user, callback) => {
+        const error = []
+        let data = {}
         if (param.firstname)data.fname = param.firstname
         if (param.lastname)data.lname = param.lastname
         if (param.email)data.email = param.email
@@ -66,6 +64,7 @@ const initDAO = {
         if (param.address)data.address = param.address
         if (param.lga)data.lga = param.lga
         if (param.state)data.state = param.state
+        if (param.state_alias)data.state_alias = param.state_alias
         if (param.country)data.country = param.country
         if (param.website)data.website = param.website 
         if (param.company)data.company = param.company
@@ -83,20 +82,20 @@ const initDAO = {
 
         if (error.length == 0) {
             if (data) {
-                clientModel.update(data, {_id:param.identity}, (resp) => {
+                clientModel.update(data, {_id:user}, (resp) => {
                     if (!resp._id)
                         return callback(Resp.error({msg:"something went wrong updating data..."}))
                     else
                         return callback(Resp.success({msg:"Client successfully updated.", resp:resp}))
                 })
             } else 
-                return callback(Resp.error({msg:"No changes detected."}))
+                return callback(Resp.error({msg:"No change detected."}))
         } else  
             return callback(Resp.error({msg:"Invalid Parameter", resp:error}))
     },
 
-    by_identity: (identity, callback) => {
-        clientModel.findOne({conditions:{_id:identity}}, (state) => {
+    by_identity: (user, callback) => {
+        clientModel.findOne({conditions:{_id:user}}, (state) => {
             if (state && !state.error) 
                 return callback(Resp.success({msg:"Data found", resp:state}))
             else 

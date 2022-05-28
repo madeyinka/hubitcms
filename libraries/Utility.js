@@ -50,7 +50,7 @@ const Utility = {
     },
 
     resp: function(res){
-        res.header("Access-Control-Allow-Origin", "*");
+        //res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         return res;
     },
@@ -65,16 +65,16 @@ const Utility = {
         const jwt = require('jsonwebtoken')
         return jwt.sign(
             {
-                "userObj": {"id": payload.id,"username": payload.name,"roles": payload.roles,"website": payload.website}
+                "userObj": {"id": payload.id, "username":payload.username, "roles": payload.roles}
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '15m'}
+            { expiresIn: '10s'}
         )
     },
 
     refresh_token: (payload) => {
         const jwt = require('jsonwebtoken')
-        return jwt.sign({"username": payload.name}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:'1d'})
+        return jwt.sign({"id": payload.id}, process.env.REFRESH_TOKEN_SECRET, {expiresIn:'1d'})
     },
 
     compare_param: function(a,b) {

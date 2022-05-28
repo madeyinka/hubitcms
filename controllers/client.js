@@ -1,7 +1,7 @@
 const express = require('express'),router = express.Router()
 const Util = require('./../libraries/Utility')
 const clientDAO = require('./../dao/ClientDAO')
-const adminChecker = require('../middlewares/adminChecker')
+const authenticator = require('../middlewares/authenticator')
 
 router.post('/create', (req, res) => {
     clientDAO.create(Util.param_extract(req), (state) => {
@@ -9,19 +9,21 @@ router.post('/create', (req, res) => {
     })
 })
 
-router.post('/modify', (req, res) => {
-    clientDAO.update(Util.param_extract(req), (state) => {
+router.post('/modify', authenticator, (req, res) => {
+    const user = req.userInfo._id
+    clientDAO.update(Util.param_extract(req), user, (state) => {
         Util.resp(res).json(state)
     })
 })
 
-router.get('/by-identity', (req, res) => {
-    clientDAO.by_identity(req.query.identity, (state) => {
+router.get('/by-identity', authenticator, (req, res) => {
+    const user = req.userInfo._id
+    clientDAO.by_identity(user, (state) => {
         Util.resp(res).json(state)
     })
 })
 
-router.get('/pull', (req, res) => {
+router.get('/pull', authenticator, (req, res) => {
     clientDAO.pull(req.query, (state) => {
         Util.resp(res).json(state)
     })

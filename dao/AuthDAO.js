@@ -18,7 +18,7 @@ const initAuth = {
                     //check if user status is active
                     if (user.status) {
                         const roles = Object.values(user.roles).filter(Boolean)
-                        const payload = {id:user._id, name:user.fname,roles:roles,website:user.website}
+                        const payload = {id:user._id, username:user.fname, roles:roles}
                         const accessToken = Util.access_token(payload)
                         const refreshToken = Util.refresh_token(payload)
                         clientModel.update({refresh_token:refreshToken}, {_id:user._id}, (state) => {
@@ -35,7 +35,7 @@ const initAuth = {
                     return res.status(400).json({msg:"Invalid Credentials"})
                 }
             } else {
-                return res.status(404).json({msg:"User not found"})
+                return res.status(400).json({msg:"Invalid Credentials"})
             }
         })
     },

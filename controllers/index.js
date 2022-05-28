@@ -15,6 +15,7 @@ router.use(api_url+'/service', require('./service'))
 router.use(api_url+'/content', require('./content'))
 router.use(api_url+'/settings', require('./settings'))
 router.use(api_url+'/contact', require('./contact'))
-//router.use(api_url+'/utility', require('./utility'))
+router.use(api_url+'/refresh', require('./refresh'))
+router.use(api_url+'/utility', require('./utility'))
 
 module.exports = router

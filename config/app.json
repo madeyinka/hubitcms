@@ -38,6 +38,8 @@
     "reset_link":"http://localhost:3000/auth/update-password",
     "asset_folder":"./assets",
     "reset_msg":"Password Reset",
+    "confirm_user":"User Confirmation",
+    "new_user_alert":"New User Alert",
     "default_folder":"assets",
     "api_query_limit": 1000,
     "rounds":15

@@ -1,14 +1,19 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const credentials = require('./middlewares/credentials')
+const corsOptions = require('./config/options')
 const _config = require('./config/app.json')
 const Logger = require('./libraries/Logger')
 const dotenv = require('dotenv').config()
 const app = express()
 
-app.use(cors())
+app.use(credentials)
+app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: true}))
 app.use(bodyParser.json())
+app.use(cookieParser())
 app.use(require('./controllers'))
 
 app.listen(process.env.PORT, function(){
