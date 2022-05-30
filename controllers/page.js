@@ -16,14 +16,16 @@ router.post('/modify', (req, res) => {
     })
 })
 
-router.get('/by-identity', (req, res) => {
+router.get('/by-identity', authenticator, (req, res) => {
+    //const user = req.userInfo.id
     pageDAO.by_identity(req.query.identity, (state) => {
         Util.resp(res).json(state)
     })
 })
 
-router.get('/pull', (req, res) => {
-    pageDAO.pull(req.query, (state) => {
+router.get('/pull', authenticator, (req, res) => {
+    user = req.userInfo.id
+    pageDAO.pull(req.query, user, (state) => {
         Util.resp(res).json(state)
     })
 })

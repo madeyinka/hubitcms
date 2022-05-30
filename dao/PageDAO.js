@@ -64,8 +64,8 @@ const initDAO = {
         })
     },
 
-    pull: (param, callback) => {
-        //param.client_id = user._id
+    pull: (param, user, callback) => {
+        param.client_id = user
         pageModel.findAll((Util.param_filter(param)), (state) => {
             if (!state.error) {
                 return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))

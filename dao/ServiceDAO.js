@@ -64,8 +64,18 @@ const initDAO = {
         })
     },
 
-    pull: (param, callback) => {
+    pull: (param, user, callback) => {
+        param.client_id = user
         serviceModel.findAll((Util.param_filter(param)), (state) => {
+            if (!state.error) {
+                return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))
+            } else 
+                return callback(Resp.error({msg:"No result found", resp:null}))
+        })
+    },
+
+    fetch_all: (param, callback) => {
+        serviceModel.findAll(Util.param_filter(param), (state) => {
             if (!state.error) {
                 return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))
             } else 
@@ -135,7 +145,8 @@ const initDAO = {
         })
     },
 
-    group_pull: (param, callback) => {
+    group_pull: (param, user, callback) => {
+        param.client_id = user
         groupModel.findAll((Util.param_filter(param)), (state) => {
             if (!state.error) {
                 return callback(Resp.success({msg:state.length + " result(s) found", total:state.length, resp:state}))
@@ -143,7 +154,7 @@ const initDAO = {
                 return callback(Resp.error({msg:"No result found", resp:null}))
         })
     },
-
+    
     group_del: (param, callback) => {
         const error = []
         if (!param.identity)error.push('Provide identity')
